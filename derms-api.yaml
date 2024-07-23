@@ -1,0 +1,1888 @@
+openapi: 3.0.0
+info:
+  title: Derbi DERMS API
+  description: Derbi DERMS API
+  version: 1.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/Derbi/derms-api/1.0.0
+    description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/BUD_2/derbi_derms_api/1.0.0
+    description: SwaggerHub API Auto Mocking
+paths:
+  /users/create:
+    post:
+      tags:
+        - users
+      summary: Create user/s
+      description: Create new user or list of users.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateUsers'
+      responses:
+        '201':
+          description: Successfully created new user/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all user IDs
+      description: Get a list of all user IDs.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched user IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+    put:
+      tags:
+        - users
+      summary: Set properties of user/s
+      description: Set the properties of a user or list of users.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUsers'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+    post:
+      tags:
+        - users
+      summary: Get user/s
+      description: Get a detailed list of specific users.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '200':
+          description: Successfully fetched user/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+  /users/delete:
+    post:
+      tags:
+        - users
+      summary: Delete user/s
+      description: Delete user or list of users. CANNOT BE UNDONE!
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /users/roles:
+    get:
+      tags:
+        - users
+      summary: Get supported user roles
+      description: Get a list of the support permission-related user roles.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched supported user roles
+          content:
+            applications/json:
+              schema:
+                type: array
+                example:
+                  - admin
+                  - writer
+                  - reader
+                items:
+                  type: string
+                  description: user role
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /resources/create:
+    post:
+      tags:
+        - resources
+      summary: Create resource/s
+      description: Create new resource or list of resources.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateResources'
+      responses:
+        '201':
+          description: Successfully created new resource/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /resources:
+    get:
+      tags:
+        - resources
+      summary: Get all resource IDs
+      description: Get a list of all resource IDs.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched resource IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+    put:
+      tags:
+        - resources
+      summary: Set properties of resource/s
+      description: Set the properties of a resource or list of resources.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateResources'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+    post:
+      tags:
+        - resources
+      summary: Get resource/s
+      description: Get a detailed list of specific resources.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '200':
+          description: Successfully fetched resource/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+  /resources/delete:
+    post:
+      tags:
+        - resources
+      summary: Delete resource/s
+      description: Delete resource or list of resources. CANNOT BE UNDONE!
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /sites/create:
+    post:
+      tags:
+        - sites
+      summary: Create site/s
+      description: Create a new site or list of sites.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateSites'
+      responses:
+        '201':
+          description: Successfully created new site/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Site'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /sites:
+    get:
+      tags:
+        - sites
+      summary: Get all site IDs
+      description: Get a list of all site IDs.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched site IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+    put:
+      tags:
+        - sites
+      summary: Set properties of site/s
+      description: Set the properties of a site or list of sites.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateSites'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+    post:
+      tags:
+        - sites
+      summary: Get site/s
+      description: Get a detailed list of specific sites.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '200':
+          description: Successfully fetched site/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Site'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /sites/delete:
+    post:
+      tags:
+        - sites
+      summary: Delete sites/s
+      description: Delete site or list of sites. CANNOT BE UNDONE!
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /sites/{id}/resources:
+    get:
+      tags:
+        - sites
+      summary: Get site resource IDs
+      description: Get a list of resource IDs that are a part of the site.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID of the site entity being queried
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched resource IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+  /groups/create:
+    post:
+      tags:
+        - groups
+      summary: Create group/s
+      description: Create new group or list of groups
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateGroups'
+      responses:
+        '201':
+          description: Successfully created new group/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /groups:
+    get:
+      tags:
+        - groups
+      summary: Get all group IDs
+      description: Get a list of all group IDs.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched group IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+    put:
+      tags:
+        - groups
+      summary: Set properties of group/s
+      description: Set the properties of a group or list of groups.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroups'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+    post:
+      tags:
+        - groups
+      summary: Get group/s
+      description: Get a detailed list of specific groups.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '200':
+          description: Successfully fetched group/s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+  /groups/delete:
+    post:
+      tags:
+        - groups
+      summary: Delete group/s
+      description: Delete group or list of groups. CANNOT BE UNDONE!
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '204':
+          description: Request success - No content to deliver
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Request body error: line 4, char 0'
+                  errorCode: 400
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+  /groups/{id}/sites:
+    get:
+      tags:
+        - groups
+      summary: Get group site IDs
+      description: Get a list of site IDs that are a part of the group.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID of the group entity being queried
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched site IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+  /groups/{id}/resources:
+    get:
+      tags:
+        - groups
+      summary: Get group resource IDs
+      description: Get a list of resources IDs that are a part of the group.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: ID of the group entity being queried
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched resource IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+        '404':
+          description: Cannot find request resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+                  errorCode: 404
+  /groups/types:
+    get:
+      tags:
+        - groups
+      summary: Get supported group types
+      description: Get a list of the supported group types.
+      parameters:
+        - name: X-Auth-Token
+          in: header
+          description: Authentication token. See /login
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched supported group types
+          content:
+            applications/json:
+              schema:
+                type: array
+                example:
+                  - System
+                  - Subtransmission
+                  - Substation
+                  - Feeder
+                  - Segment
+                  - Transformer
+                  - Service Point
+                  - Non-topology
+                items:
+                  type: string
+                  description: group type
+        '403':
+          description: Invalid authentication or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              example:
+                value:
+                  error: Invalid authentication or insufficient permissions
+                  errorCode: 403
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        created:
+          type: string
+          description: The timestamp at which the user entity was created
+          format: date-time
+        companyId:
+          type: string
+          description: The ID of the company entity that the user entity belongs to
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        edited:
+          type: string
+          description: The most recent timestamp at which the user entity was edited
+          format: date-time
+        email:
+          type: string
+          description: The email of the user
+          example: jeff.bezos@amazon.com
+        externalId:
+          type: string
+          description: The user-defined ID of the DER entity
+          example: user-123
+        id:
+          type: string
+          description: The ID of the user entity
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        name:
+          type: string
+          description: The name of the user
+          example: Jeff Bezos
+        phone:
+          type: string
+          description: The phone number of the user
+          example: 123-456-78910
+        role:
+          type: string
+          description: The role of the user within the DERMS platform
+          example: admin
+        status:
+          type: string
+          description: The status of the user entity
+          example: active
+        version:
+          type: integer
+          description: The version of the user entity
+          example: 1
+      description: A user entity which represents a user of the DERMS platform
+    ResourceConfig:
+      type: object
+      properties:
+        capacity:
+          type: integer
+          description: The energy capacity of the resource (kWh)
+          example: 2500
+        endpoint:
+          type: string
+          description: The endpoint used to interface with the resource
+          example: https://super_resources_api/resource/hfdi1349wqegoifjawg9
+        power:
+          type: integer
+          description: The power capacity of the resource (kW)
+          example: 500
+      description: The resource-specific configuration of the resource entity
+    Resource:
+      type: object
+      properties:
+        created:
+          type: string
+          description: The timestamp at which the resource entity was created
+          format: date-time
+        companyId:
+          type: string
+          description: The ID of the company entity that the resource entity belongs to
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        config:
+          $ref: '#/components/schemas/ResourceConfig'
+        edited:
+          type: string
+          description: The most recent timestamp at which the resource entity was edited
+          format: date-time
+        externalId:
+          type: string
+          description: The user-defined ID of the resource entity
+          example: Resource-123
+        id:
+          type: string
+          description: The ID of the resource entity
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        manufacturer:
+          type: string
+          description: The manufacturer of the resource that the resource entity represents
+          example: Nexamp
+        model:
+          type: string
+          description: >-
+            The manufacturer's model number for the der that the resource entity
+            represents
+          example: inv-123z
+        name:
+          type: string
+          description: The user-defined name of the resource entity
+          example: My Resource
+        serial:
+          type: string
+          description: >-
+            The manufacturer's serial number of the resource that the resource entity
+            represents
+          example: SN12345
+        siteId:
+          type: string
+          description: The ID of the site entity that the resource entity is a part of
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        status:
+          type: string
+          description: The status of the resource entity
+          example: active
+        type:
+          type: string
+          description: The type resource that the resource entity represents
+          example: inverter
+        version:
+          type: integer
+          description: The version of the resource entity
+          example: 1
+      description: >-
+        A resource entity which represents a physical energy resource operating in the
+        field
+    SiteAddress:
+      type: object
+      properties:
+        country:
+          type: string
+          description: The country of the site's address
+          example: Canada
+        provinceState:
+          type: string
+          description: The province or state of the site's address
+          example: Alberta
+        city:
+          type: string
+          description: The city of the site's address
+          example: Calgary
+        streetAddress:
+          type: string
+          description: The street address of the site's address
+          example: 555 Saddledome Rise SE
+        postalZip:
+          type: string
+          description: The postal or zip code of the site's address
+          example: T2G2W1
+      description: The site-specific configuration of the site entity
+    Site:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/SiteAddress'
+        created:
+          type: string
+          description: The timestamp at which the site entity was created
+          format: date-time
+        companyId:
+          type: string
+          description: The ID of the company entity that the site entity belongs to
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        edited:
+          type: string
+          description: The most recent timestamp at which the site entity was edited
+          format: date-time
+        externalId:
+          type: string
+          description: The user-defined ID of the site entity
+          example: Site-123z
+        id:
+          type: string
+          description: The ID of the site entity
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        name:
+          type: string
+          description: The user-defined name of the site entity
+          example: My Site
+        groups:
+          type: array
+          description: List of group entity IDs that the site entity is a part of
+          items:
+            type: string
+            description: group ID
+            example: 12345678-90ab-cdef-1234-567890abcdef
+        status:
+          type: string
+          description: The status of the site entity
+          example: active
+        timeZone:
+          type: string
+          description: The timezone of the site's address
+          example: GMT-6
+        version:
+          type: integer
+          description: The version of the site entity
+          example: 1
+      description: >-
+        A site entity which represents a physical site where an asortment of
+        ders operate
+    Group:
+      type: object
+      properties:
+        created:
+          type: string
+          description: The timestamp at which the group entity was created
+          format: date-time
+        companyId:
+          type: string
+          description: The ID of the company entity that the group entity belongs to
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        edited:
+          type: string
+          description: The most recent timestamp at which the group entity was edited
+          format: date-time
+        externalId:
+          type: string
+          description: The user-defined ID of the group entity
+          example: Group-123z
+        id:
+          type: string
+          description: The ID of the group entity
+          format: uuid-4
+          example: 12345678-90ab-cdef-1234-567890abcdef
+        name:
+          type: string
+          description: The user-defined name of the group entity
+          example: My Group
+        priority:
+          type: integer
+          description: >-
+            The priority a group has over groups when sites belongs to more than
+            one group
+          example: 1
+        status:
+          type: string
+          description: The status of the group entity
+          example: active
+        type:
+          type: string
+          description: The type of group that the group entity represents
+          example: Substation
+        version:
+          type: integer
+          description: The version of the group entity
+          example: 1
+      description: >-
+        A group entity which represents an aggregation of phiscal sites
+        operating in conjunction with each other
+    IdList:
+      type: array
+      items:
+        type: string
+        description: Entity ID
+        example: 12345678-90ab-cdef-1234-567890abcdef
+    inline_response_400:
+      required:
+        - error
+        - errorCode
+      type: object
+      properties:
+        error:
+          type: string
+        errorCode:
+          type: integer
+  responses:
+    UsersCreated:
+      description: Successfully created new user/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+    UserIdsFetched:
+      description: Successfully fetched user IDs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IdList'
+    UsersFetched:
+      description: Successfully fetched user/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+    UserRolesFetched:
+      description: Successfully fetched supported user roles
+      content:
+        applications/json:
+          schema:
+            type: array
+            example:
+              - admin
+              - writer
+              - reader
+            items:
+              type: string
+              description: user role
+    ResourceCreated:
+      description: Successfully created new resource/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Resource'
+    ResourceIdsFetched:
+      description: Successfully fetched resource IDs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IdList'
+    ResourcesFetched:
+      description: Successfully fetched resources/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Resource'
+    SitesCreated:
+      description: Successfully created new site/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Site'
+    SiteIdsFetched:
+      description: Successfully fetched site IDs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IdList'
+    SitesFetched:
+      description: Successfully fetched site/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Site'
+    GroupsCreated:
+      description: Successfully created new group/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Group'
+    GroupIdsFetched:
+      description: Successfully fetched group IDs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IdList'
+    GroupsFetched:
+      description: Successfully fetched group/s
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Group'
+    GroupTypesFetched:
+      description: Successfully fetched supported group types
+      content:
+        applications/json:
+          schema:
+            type: array
+            example:
+              - System
+              - Subtransmission
+              - Substation
+              - Feeder
+              - Segment
+              - Transformer
+              - Service Point
+              - Non-topology
+            items:
+              type: string
+              description: group type
+    NoContent:
+      description: Request success - No content to deliver
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_400'
+          example:
+            value:
+              error: 'Request body error: line 4, char 0'
+              errorCode: 400
+    Forbidden:
+      description: Invalid authentication or insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_400'
+          example:
+            value:
+              error: Invalid authentication or insufficient permissions
+              errorCode: 403
+    ResourceNotFound:
+      description: Cannot find request resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_response_400'
+          example:
+            value:
+              error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
+              errorCode: 404
+  parameters:
+    AuthParam:
+      name: X-Auth-Token
+      in: header
+      description: Authentication token. See /login
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    SiteId:
+      name: id
+      in: path
+      description: ID of the site entity being queried
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    GroupId:
+      name: id
+      in: path
+      description: ID of the group entity being queried
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+  requestBodies:
+    IdList:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+              description: Entity ID
+              example: 12345678-90ab-cdef-1234-567890abcdef
+      required: true
+    CreateUsers:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              required:
+                - email
+                - role
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email address
+                  example: jeff.bezos@amazon.com
+                externalId:
+                  type: string
+                  description: The user-defined ID of the user entity
+                  example: user-123
+                name:
+                  type: string
+                  description: The name of the user
+                  example: Jeff Bezos
+                phone:
+                  type: string
+                  description: The phone number of the user
+                  example: 123-456-78910
+                role:
+                  type: string
+                  description: The role of the user within the DERMS platform
+                  example: admin
+      required: false
+    UpdateUsers:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              required:
+                - id
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email address
+                  example: jeff.bezos@amazon.com
+                externalId:
+                  type: string
+                  description: The user-defined ID of the user entity
+                  example: user-123
+                name:
+                  type: string
+                  description: The name of the user
+                  example: Jeff Bezos
+                phone:
+                  type: string
+                  description: The phone number of the user
+                  example: 123-456-78910
+                role:
+                  type: string
+                  description: The role of the user within the DERMS platform
+                  example: admin
+      required: true
+    CreateResources:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              required:
+                - manufacturer
+                - model
+                - type
+              type: object
+              properties:
+                config:
+                  $ref: '#/components/schemas/ResourceConfig'
+                externalId:
+                  type: string
+                  description: The user-defined ID of the resource entity
+                  example: Resource-123z
+                manufacturer:
+                  type: string
+                  description: The manufacturer of the resource that the resource entity represents
+                  example: Nexamp
+                model:
+                  type: string
+                  description: >-
+                    The manufacturer's model number for the resource that the resource
+                    entity represents
+                  example: inv-123z
+                name:
+                  type: string
+                  description: The user-defined name of the resource entity
+                  example: My Resource
+                serial:
+                  type: string
+                  description: >-
+                    The manufacturer's serial number of the resource that the resource
+                    entity represents
+                  example: SN12345
+                siteId:
+                  type: string
+                  description: The ID of the site entity that the resource entity is a part of
+                  example: 12345678-90ab-cdef-1234-567890abcdef
+                type:
+                  type: string
+                  description: The type resource that the resource entity represents
+                  example: inverter
+      required: false
+    UpdateResources:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              required:
+                - id
+              type: object
+              properties:
+                config:
+                  $ref: '#/components/schemas/ResourceConfig'
+                extenalId:
+                  type: string
+                  description: The user-defined ID of the resource entity
+                  example: My Resource
+                id:
+                  type: string
+                  description: The ID of the Resource entity to be updated
+                  example: 12345678-90ab-cdef-1234-567890abcdef
+                manufacturer:
+                  type: string
+                  description: The manufacturer of the resource that the resource entity represents
+                  example: Nexamp
+                model:
+                  type: string
+                  description: >-
+                    The manufacturer's model number for the resource that the resource
+                    entity represents
+                  example: inv-123z
+                name:
+                  type: string
+                  description: The user-defined name of the resource entity
+                  example: My Resource
+                serial:
+                  type: string
+                  description: >-
+                    The manufacturer's serial number of the resource that the resource
+                    entity represents
+                  example: SN12345
+                siteId:
+                  type: string
+                  description: >-
+                    The NEW ID of the site entity that the resource entity is a part
+                    of
+                  example: 12345678-90ab-cdef-1234-567890abcdef
+                type:
+                  type: string
+                  description: The type resource that the resource entity represents
+                  example: inverter
+      required: true
+    CreateSites:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                address:
+                  $ref: '#/components/schemas/SiteAddress'
+                externalId:
+                  type: string
+                  description: The user-defined ID of the site entity
+                  example: Site-123z
+                name:
+                  type: string
+                  description: The user-defined name of the site entity
+                  example: My Site
+                timeZone:
+                  type: string
+                  description: The timezone of the site's address
+                  example: GMT-6
+                groups:
+                  type: array
+                  description: List of group entity IDs that the site entity is a part of
+                  items:
+                    type: string
+                    description: group ID
+                    example: 12345678-90ab-cdef-1234-567890abcdef
+      required: false
+    UpdateSites:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              required:
+                - id
+              type: object
+              properties:
+                address:
+                  $ref: '#/components/schemas/SiteAddress'
+                externalId:
+                  type: string
+                  description: The user-defined ID of the site entity
+                  example: Site-123z
+                id:
+                  type: string
+                  description: The ID of the site entity to be updated
+                  example: 12345678-90ab-cdef-1234-567890abcdef
+                name:
+                  type: string
+                  description: The user-defined name of the site entity
+                  example: My Site
+                timeZone:
+                  type: string
+                  description: The timezone of the site's address
+                  example: GMT-6
+                groups:
+                  type: array
+                  description: List of group entity IDs that the site entity is a part of
+                  items:
+                    type: string
+                    description: group ID
+                    example: 12345678-90ab-cdef-1234-567890abcdef
+      required: true
+    CreateGroups:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                externalId:
+                  type: string
+                  description: The user-defined ID of the group entity
+                  example: Group-123z
+                name:
+                  type: string
+                  description: The user-defined name of the group entity
+                  example: My Group
+                priority:
+                  type: integer
+                  description: >-
+                    The priority a group has over groups when sites belongs to
+                    more than one group
+                  example: 1
+                type:
+                  type: string
+                  description: The type of group that the group entity represents
+                  example: Substation
+      required: false
+    UpdateGroups:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              required:
+                - id
+              type: object
+              properties:
+                externalId:
+                  type: string
+                  description: The user-defined ID of the group entity
+                  example: Group-123z
+                id:
+                  type: string
+                  description: The ID of the group entity to be updated
+                  example: 12345678-90ab-cdef-1234-567890abcdef
+                name:
+                  type: string
+                  description: The user-defined name of the group entity
+                  example: My Group
+                priority:
+                  type: integer
+                  description: >-
+                    The priority a group has over groups when sites belongs to
+                    more than one group
+                  example: 1
+                type:
+                  type: string
+                  description: The type of group that the group entity represents
+                  example: Substation
+      required: true
+  securitySchemes:
+    accessCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://example.com/oauth/auth
+          tokenUrl: http://example.com/oauth/token
+          scopes:
+            write: allows modifying resources
+            read: allows reading resources
