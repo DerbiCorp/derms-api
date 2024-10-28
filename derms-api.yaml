@@ -391,224 +391,136 @@ paths:
     post:
       tags:
         - resources
-      summary: Create resource/s
-      description: Create new resource or list of resources.
+      summary: Create resource(s)
+      description: Add new resource(s) to the DERMS system, specifying required fields such as resource type, manufacturer, model, and site ID. 
       parameters:
-        - name: X-Auth-Token
-          in: header
-          description: Authentication token. See /login
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/AuthParam'
       requestBody:
-        $ref: '#/components/requestBodies/CreateResources'
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                required:
+                  - manufacturer
+                  - model
+                  - type
+                  - name
+                  - organizationId
+                type: object
+                properties:
+                  externalId:
+                    type: string
+                    description: The user-defined ID for the resource
+                  manufacturer:
+                    type: string
+                    description: The name of the resource's manufacturer
+                  model:
+                    type: string
+                    description: The model number of the resource
+                  name:
+                    type: string
+                    description: The name of the resource
+                  organizationId:
+                    type: string
+                    description: The organization the resource belongs to
+                    format: uuid
+                  siteId:
+                    type: string
+                    description: The site to which this resource is linked
+                    format: uuid
+                  type:
+                    type: string
+                    description: Resource type (e.g., inverter, pv)
+                  serial:
+                    type: string
+                    description: Manufacturer's serial number of the resource
+                  config:
+                    type: object
+                    nullable: true
+                    description: Configuration details based on resource type
+                    oneOf:
+                      - $ref: '#/components/schemas/BatteryResourceConfig'
+                      - $ref: '#/components/schemas/EVResourceConfig'
+                      - $ref: '#/components/schemas/InverterResourceConfig'
+                      - $ref: '#/components/schemas/PVResourceConfig'
+                      - $ref: '#/components/schemas/MeterResourceConfig'
       responses:
         '201':
-          description: Successfully created new resource/s
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Resource'
+          $ref: '#/components/responses/ResourceCreated'
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: 'Request body error: line 4, char 0'
-                  errorCode: 400
+          $ref: '#/components/responses/BadRequest'
         '403':
-          description: Invalid authentication or insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: Invalid authentication or insufficient permissions
-                  errorCode: 403
+          $ref: '#/components/responses/Forbidden'
+
   /resources:
     get:
       tags:
         - resources
       summary: Get all resource IDs
-      description: Get a list of all resource IDs.
+      description: Retrieve a list of all resources available in the DERMS system.
       parameters:
-        - name: X-Auth-Token
-          in: header
-          description: Authentication token. See /login
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/AuthParam'
       responses:
         '200':
-          description: Successfully fetched resource IDs
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IdList'
+          $ref: '#/components/responses/ResourceIdsFetched'
         '403':
-          description: Invalid authentication or insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: Invalid authentication or insufficient permissions
-                  errorCode: 403
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      tags:
+        - resources
+      summary: Get resource details
+      description: Get detailed information on specific resources by their IDs.
+      parameters:
+        - $ref: '#/components/parameters/AuthParam'
+      requestBody:
+        $ref: '#/components/requestBodies/IdList'
+      responses:
+        '200':
+          $ref: '#/components/responses/ResourcesFetched'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
     put:
       tags:
         - resources
-      summary: Set properties of resource/s
-      description: Set the properties of a resource or list of resources.
+      summary: Update properties of resource(s)
+      description: Update details for specified resource(s) such as model, type, and configurations.
       parameters:
-        - name: X-Auth-Token
-          in: header
-          description: Authentication token. See /login
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/AuthParam'
       requestBody:
         $ref: '#/components/requestBodies/UpdateResources'
       responses:
         '204':
-          description: Request success - No content to deliver
+          $ref: '#/components/responses/NoContent'
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: 'Request body error: line 4, char 0'
-                  errorCode: 400
+          $ref: '#/components/responses/BadRequest'
         '403':
-          description: Invalid authentication or insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: Invalid authentication or insufficient permissions
-                  errorCode: 403
+          $ref: '#/components/responses/Forbidden'
         '404':
-          description: Cannot find request resource
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
-                  errorCode: 404
-    post:
-      tags:
-        - resources
-      summary: Get resource/s
-      description: Get a detailed list of specific resources.
-      parameters:
-        - name: X-Auth-Token
-          in: header
-          description: Authentication token. See /login
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-      requestBody:
-        $ref: '#/components/requestBodies/IdList'
-      responses:
-        '200':
-          description: Successfully fetched resource/s
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Resource'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: 'Request body error: line 4, char 0'
-                  errorCode: 400
-        '403':
-          description: Invalid authentication or insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: Invalid authentication or insufficient permissions
-                  errorCode: 403
-        '404':
-          description: Cannot find request resource
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: 'Entity does NOT exist: 12345678-90ab-cdef-1234-567890abcdef'
-                  errorCode: 404
+          $ref: '#/components/responses/ResourceNotFound'
+
   /resources/delete:
     post:
       tags:
         - resources
-      summary: Delete resource/s
-      description: Delete resource or list of resources. CANNOT BE UNDONE!
+      summary: Delete resource(s)
+      description: Delete specific resources by their IDs. This operation is irreversible.
       parameters:
-        - name: X-Auth-Token
-          in: header
-          description: Authentication token. See /login
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/AuthParam'
       requestBody:
         $ref: '#/components/requestBodies/IdList'
       responses:
         '204':
-          description: Request success - No content to deliver
+          $ref: '#/components/responses/NoContent'
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: 'Request body error: line 4, char 0'
-                  errorCode: 400
+          $ref: '#/components/responses/BadRequest'
         '403':
-          description: Invalid authentication or insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-              example:
-                value:
-                  error: Invalid authentication or insufficient permissions
-                  errorCode: 403
+          $ref: '#/components/responses/Forbidden'
+
   /sites/create:
     post:
       tags:
@@ -1237,6 +1149,7 @@ paths:
                 value:
                   error: Invalid authentication or insufficient permissions
                   errorCode: 403
+  
 components:
   schemas:
     Organization:
@@ -2027,3 +1940,61 @@ components:
           scopes:
             write: allows modifying resources
             read: allows reading resources
+  BatteryResourceConfig:
+      type: object
+      properties:
+        chargePowerLimitWAc:
+          type: number
+          description: Charge power limit in watts AC
+        dischargePowerLimitWAc:
+          type: number
+          description: Discharge power limit in watts AC
+        minSoeWhAc:
+          type: number
+          description: Minimum state of energy in watt hours AC
+        maxSoeWhAc:
+          type: number
+          description: Maximum state of energy in watt hours AC
+
+    EVResourceConfig:
+      type: object
+      properties:
+        minSoeWhAc:
+          type: number
+          description: Minimum state of energy in watt hours AC
+        maxSoeWhAc:
+          type: number
+          description: Maximum state of energy in watt hours AC
+        maxChargePowerWAc:
+          type: number
+          description: Maximum charge power in watts AC
+        maxDischargePowerWAc:
+          type: number
+          description: Maximum discharge power in watts AC
+
+    InverterResourceConfig:
+      type: object
+      properties:
+        chargePowerLimitWAc:
+          type: number
+          description: Charge power limit in watts AC
+        dischargePowerLimitWAc:
+          type: number
+          description: Discharge power limit in watts AC
+        pvInputPowerLimitWDc:
+          type: number
+          description: PV input power limit in watts DC
+
+    PVResourceConfig:
+      type: object
+      properties:
+        panelCount:
+          type: integer
+          description: Number of panels in the PV system
+
+    MeterResourceConfig:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of meter (e.g., import_export, pv, site_load)
