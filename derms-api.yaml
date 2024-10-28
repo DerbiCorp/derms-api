@@ -1804,6 +1804,64 @@ components:
                   description: The type resource that the resource entity represents
                   example: inverter
       required: true
+    BatteryResourceConfig:
+      type: object
+      properties:
+        chargePowerLimitWAc:
+          type: number
+          description: Charge power limit in watts AC
+        dischargePowerLimitWAc:
+          type: number
+          description: Discharge power limit in watts AC
+        minSoeWhAc:
+          type: number
+          description: Minimum state of energy in watt hours AC
+        maxSoeWhAc:
+          type: number
+          description: Maximum state of energy in watt hours AC
+
+    EVResourceConfig:
+      type: object
+      properties:
+        minSoeWhAc:
+          type: number
+          description: Minimum state of energy in watt hours AC
+        maxSoeWhAc:
+          type: number
+          description: Maximum state of energy in watt hours AC
+        maxChargePowerWAc:
+          type: number
+          description: Maximum charge power in watts AC
+        maxDischargePowerWAc:
+          type: number
+          description: Maximum discharge power in watts AC
+
+    InverterResourceConfig:
+      type: object
+      properties:
+        chargePowerLimitWAc:
+          type: number
+          description: Charge power limit in watts AC
+        dischargePowerLimitWAc:
+          type: number
+          description: Discharge power limit in watts AC
+        pvInputPowerLimitWDc:
+          type: number
+          description: PV input power limit in watts DC
+
+    PVResourceConfig:
+      type: object
+      properties:
+        panelCount:
+          type: integer
+          description: Number of panels in the PV system
+
+    MeterResourceConfig:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of meter (e.g., import_export, pv, site_load)
     CreateSites:
       content:
         application/json:
@@ -1940,61 +1998,3 @@ components:
           scopes:
             write: allows modifying resources
             read: allows reading resources
-  BatteryResourceConfig:
-      type: object
-      properties:
-        chargePowerLimitWAc:
-          type: number
-          description: Charge power limit in watts AC
-        dischargePowerLimitWAc:
-          type: number
-          description: Discharge power limit in watts AC
-        minSoeWhAc:
-          type: number
-          description: Minimum state of energy in watt hours AC
-        maxSoeWhAc:
-          type: number
-          description: Maximum state of energy in watt hours AC
-
-    EVResourceConfig:
-      type: object
-      properties:
-        minSoeWhAc:
-          type: number
-          description: Minimum state of energy in watt hours AC
-        maxSoeWhAc:
-          type: number
-          description: Maximum state of energy in watt hours AC
-        maxChargePowerWAc:
-          type: number
-          description: Maximum charge power in watts AC
-        maxDischargePowerWAc:
-          type: number
-          description: Maximum discharge power in watts AC
-
-    InverterResourceConfig:
-      type: object
-      properties:
-        chargePowerLimitWAc:
-          type: number
-          description: Charge power limit in watts AC
-        dischargePowerLimitWAc:
-          type: number
-          description: Discharge power limit in watts AC
-        pvInputPowerLimitWDc:
-          type: number
-          description: PV input power limit in watts DC
-
-    PVResourceConfig:
-      type: object
-      properties:
-        panelCount:
-          type: integer
-          description: Number of panels in the PV system
-
-    MeterResourceConfig:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Type of meter (e.g., import_export, pv, site_load)
