@@ -9,6 +9,123 @@ servers:
   - url: https://virtserver.swaggerhub.com/BUD_2/derbi_derms_api/1.0.0
     description: SwaggerHub API Auto Mocking
 paths:
+/organizations/create:
+    post:
+      tags:
+        - organizations
+      summary: Create organization(s)
+      description: Create a new organization or list of organizations.
+      parameters:
+        - $ref: '#/components/parameters/AuthParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The user-defined name of the organization.
+                  externalId:
+                    type: string
+                    description: The external identifier of the organization.
+                  address:
+                    type: string
+                    description: The address of the organization.
+      responses:
+        '201':
+          description: Successfully created new organization(s)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /organizations:
+    get:
+      tags:
+        - organizations
+      summary: Get all organization IDs
+      description: Retrieve a list of all organization IDs.
+      parameters:
+        - $ref: '#/components/parameters/AuthParam'
+      responses:
+        '200':
+          description: Successfully fetched organization IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    put:
+      tags:
+        - organizations
+      summary: Set properties of organization(s)
+      description: Update properties of an organization or list of organizations.
+      parameters:
+        - $ref: '#/components/parameters/AuthParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                properties:
+                  name:
+                    type: string
+                    description: The name of the organization.
+                  address:
+                    type: string
+                    description: The address of the organization.
+                  externalId:
+                    type: string
+                    description: External identifier for the organization.
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /organizations/{id}/sites:
+    get:
+      tags:
+        - organizations
+      summary: Get organization site IDs
+      description: Retrieve a list of site IDs belonging to the specified organization.
+      parameters:
+        - $ref: '#/components/parameters/AuthParam'
+        - name: id
+          in: path
+          required: true
+          description: ID of the organization being queried.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched site IDs for the organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdList'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ResourceNotFound'
+
   /users/create:
     post:
       tags:
@@ -1122,6 +1239,30 @@ paths:
                   errorCode: 403
 components:
   schemas:
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid-4
+          description: The ID of the organization entity.
+        created:
+          type: string
+          format: date-time
+          description: The timestamp when the organization entity was created.
+        edited:
+          type: string
+          format: date-time
+          description: The most recent timestamp when the organization entity was edited.
+        name:
+          type: string
+          description: The name of the organization.
+        externalId:
+          type: string
+          description: External identifier for the organization.
+        status:
+          type: integer
+          description: Status of the organization, referencing `organization_statuses`.
     User:
       type: object
       properties:
