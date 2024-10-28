@@ -1226,22 +1226,64 @@ components:
           description: The version of the user entity
           example: 1
       description: A user entity which represents a user of the DERMS platform
-    ResourceConfig:
+    BatteryResourceConfig:
       type: object
       properties:
-        capacity:
+        chargePowerLimitWAc:
+          type: number
+          description: Charge power limit in watts AC
+        dischargePowerLimitWAc:
+          type: number
+          description: Discharge power limit in watts AC
+        minSoeWhAc:
+          type: number
+          description: Minimum state of energy in watt hours AC
+        maxSoeWhAc:
+          type: number
+          description: Maximum state of energy in watt hours AC
+
+    EVResourceConfig:
+      type: object
+      properties:
+        minSoeWhAc:
+          type: number
+          description: Minimum state of energy in watt hours AC
+        maxSoeWhAc:
+          type: number
+          description: Maximum state of energy in watt hours AC
+        maxChargePowerWAc:
+          type: number
+          description: Maximum charge power in watts AC
+        maxDischargePowerWAc:
+          type: number
+          description: Maximum discharge power in watts AC
+
+    InverterResourceConfig:
+      type: object
+      properties:
+        chargePowerLimitWAc:
+          type: number
+          description: Charge power limit in watts AC
+        dischargePowerLimitWAc:
+          type: number
+          description: Discharge power limit in watts AC
+        pvInputPowerLimitWDc:
+          type: number
+          description: PV input power limit in watts DC
+
+    PVResourceConfig:
+      type: object
+      properties:
+        panelCount:
           type: integer
-          description: The energy capacity of the resource (kWh)
-          example: 2500
-        endpoint:
+          description: Number of panels in the PV system
+
+    MeterResourceConfig:
+      type: object
+      properties:
+        type:
           type: string
-          description: The endpoint used to interface with the resource
-          example: https://super_resources_api/resource/hfdi1349wqegoifjawg9
-        power:
-          type: integer
-          description: The power capacity of the resource (kW)
-          example: 500
-      description: The resource-specific configuration of the resource entity
+          description: Type of meter (e.g., import_export, pv, site_load)
     Resource:
       type: object
       properties:
@@ -1255,7 +1297,7 @@ components:
           format: uuid-4
           example: 12345678-90ab-cdef-1234-567890abcdef
         config:
-          $ref: '#/components/schemas/ResourceConfig'
+          $ref: '#/components/schemas/BatteryResourceConfig'
         edited:
           type: string
           description: The most recent timestamp at which the resource entity was edited
@@ -1640,6 +1682,7 @@ components:
             type: array
             items:
               type: string
+              format: uuid
               description: Entity ID
               example: 12345678-90ab-cdef-1234-567890abcdef
       required: true
@@ -1685,6 +1728,11 @@ components:
                 - id
               type: object
               properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: The ID of the user entity to be updated
+                  example: 12345678-90ab-cdef-1234-567890abcdef
                 email:
                   type: string
                   description: The user's email address
@@ -1787,6 +1835,7 @@ components:
                   example: My Resource
                 id:
                   type: string
+                  format: uuid
                   description: The ID of the Resource entity to be updated
                   example: 12345678-90ab-cdef-1234-567890abcdef
                 manufacturer:
@@ -1820,64 +1869,6 @@ components:
                   description: The type resource that the resource entity represents
                   example: inverter
       required: true
-    BatteryResourceConfig:
-      type: object
-      properties:
-        chargePowerLimitWAc:
-          type: number
-          description: Charge power limit in watts AC
-        dischargePowerLimitWAc:
-          type: number
-          description: Discharge power limit in watts AC
-        minSoeWhAc:
-          type: number
-          description: Minimum state of energy in watt hours AC
-        maxSoeWhAc:
-          type: number
-          description: Maximum state of energy in watt hours AC
-
-    EVResourceConfig:
-      type: object
-      properties:
-        minSoeWhAc:
-          type: number
-          description: Minimum state of energy in watt hours AC
-        maxSoeWhAc:
-          type: number
-          description: Maximum state of energy in watt hours AC
-        maxChargePowerWAc:
-          type: number
-          description: Maximum charge power in watts AC
-        maxDischargePowerWAc:
-          type: number
-          description: Maximum discharge power in watts AC
-
-    InverterResourceConfig:
-      type: object
-      properties:
-        chargePowerLimitWAc:
-          type: number
-          description: Charge power limit in watts AC
-        dischargePowerLimitWAc:
-          type: number
-          description: Discharge power limit in watts AC
-        pvInputPowerLimitWDc:
-          type: number
-          description: PV input power limit in watts DC
-
-    PVResourceConfig:
-      type: object
-      properties:
-        panelCount:
-          type: integer
-          description: Number of panels in the PV system
-
-    MeterResourceConfig:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Type of meter (e.g., import_export, pv, site_load)
     CreateSites:
       content:
         application/json:
@@ -1926,6 +1917,7 @@ components:
                   example: Site-123z
                 id:
                   type: string
+                  format: uuid
                   description: The ID of the site entity to be updated
                   example: 12345678-90ab-cdef-1234-567890abcdef
                 name:
@@ -1987,6 +1979,7 @@ components:
                   example: Group-123z
                 id:
                   type: string
+                  format: uuid
                   description: The ID of the group entity to be updated
                   example: 12345678-90ab-cdef-1234-567890abcdef
                 name:
