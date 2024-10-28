@@ -1718,16 +1718,16 @@ components:
                 - type
               type: object
               properties:
-                  config:
-                    type: object
-                    nullable: true
-                    description: Configuration details based on resource type
-                    oneOf:
-                      - $ref: '#/components/schemas/BatteryResourceConfig'
-                      - $ref: '#/components/schemas/EVResourceConfig'
-                      - $ref: '#/components/schemas/InverterResourceConfig'
-                      - $ref: '#/components/schemas/PVResourceConfig'
-                      - $ref: '#/components/schemas/MeterResourceConfig'
+                config:
+                  type: object
+                  nullable: true
+                  description: Configuration details based on resource type
+                  oneOf:
+                    - $ref: '#/components/schemas/BatteryResourceConfig'
+                    - $ref: '#/components/schemas/EVResourceConfig'
+                    - $ref: '#/components/schemas/InverterResourceConfig'
+                    - $ref: '#/components/schemas/PVResourceConfig'
+                    - $ref: '#/components/schemas/MeterResourceConfig'
                 externalId:
                   type: string
                   description: The user-defined ID of the resource entity
