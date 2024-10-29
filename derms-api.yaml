@@ -42,7 +42,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Organization'
+                  $ref: '#/components/schemas/EntityId'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -151,7 +151,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/EntityId'
         '400':
           description: Bad Request
           content:
@@ -447,7 +447,7 @@ paths:
                       - $ref: '#/components/schemas/MeterResourceConfig'
       responses:
         '201':
-          $ref: '#/components/responses/ResourceCreated'
+          $ref: '#/components/schemas/EntityId'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -546,7 +546,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Site'
+                  $ref: '#/components/schemas/EntityId'
         '400':
           description: Bad Request
           content:
@@ -808,7 +808,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Group'
+                  $ref: '#/components/schemas/EntityId'
         '400':
           description: Bad Request
           content:
@@ -1152,30 +1152,13 @@ paths:
   
 components:
   schemas:
-    Organization:
+    EntityId:
       type: object
       properties:
         id:
           type: string
           format: uuid-4
           description: The ID of the organization entity.
-        created:
-          type: string
-          format: date-time
-          description: The timestamp when the organization entity was created.
-        edited:
-          type: string
-          format: date-time
-          description: The most recent timestamp when the organization entity was edited.
-        name:
-          type: string
-          description: The name of the organization.
-        externalId:
-          type: string
-          description: External identifier for the organization.
-        status:
-          type: integer
-          description: Status of the organization, referencing `organization_statuses`.
     User:
       type: object
       properties:
