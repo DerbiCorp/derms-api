@@ -1157,7 +1157,7 @@ components:
       properties:
         id:
           type: string
-          format: uuid-4
+          format: uuid
           description: The ID of the organization entity.
     User:
       type: object
@@ -1169,7 +1169,7 @@ components:
         companyId:
           type: string
           description: The ID of the company entity that the user entity belongs to
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         edited:
           type: string
@@ -1186,7 +1186,7 @@ components:
         id:
           type: string
           description: The ID of the user entity
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         name:
           type: string
@@ -1277,7 +1277,7 @@ components:
         companyId:
           type: string
           description: The ID of the company entity that the resource entity belongs to
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         config:
           $ref: '#/components/schemas/BatteryResourceConfig'
@@ -1292,7 +1292,7 @@ components:
         id:
           type: string
           description: The ID of the resource entity
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         manufacturer:
           type: string
@@ -1317,7 +1317,7 @@ components:
         siteId:
           type: string
           description: The ID of the site entity that the resource entity is a part of
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         status:
           type: string
@@ -1370,7 +1370,7 @@ components:
         companyId:
           type: string
           description: The ID of the company entity that the site entity belongs to
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         edited:
           type: string
@@ -1383,7 +1383,7 @@ components:
         id:
           type: string
           description: The ID of the site entity
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         name:
           type: string
@@ -1421,7 +1421,7 @@ components:
         companyId:
           type: string
           description: The ID of the company entity that the group entity belongs to
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         edited:
           type: string
@@ -1434,7 +1434,7 @@ components:
         id:
           type: string
           description: The ID of the group entity
-          format: uuid-4
+          format: uuid
           example: 12345678-90ab-cdef-1234-567890abcdef
         name:
           type: string
